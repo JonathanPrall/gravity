@@ -12,8 +12,8 @@ public class RegularPendulum extends AbstractPendulum {
      * Creates a new Pendulum instance 
      */
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
-		     double inDelta, double inDiss) {
-	super (inLength, inMass, inTheta0);
+		     double inDelta, double inDiss, GravityConstant GC) {
+	super (inLength, inMass, inTheta0, GC);
 	delta=inDelta;
 	dissipation = inDiss;
 	lastVel = 0;
@@ -23,10 +23,14 @@ public class RegularPendulum extends AbstractPendulum {
 
     public RegularPendulum (double inLength, double inMass, double inTheta0, 
 		     double inDelta) {
-	this (inLength, inMass, inTheta0, inDelta, 0);
+    	this (inLength, inMass, inTheta0, inDelta, 0, GC);
     }
 
-    public void step () {
+    public RegularPendulum(double inLen, double inMass, double intheta0, double indelta, GravityConstant GC) {
+		this(inLen, inMass, intheta0, indelta, 0, GC);
+	}
+
+	public void step () {
 	iterations++;
 	lastTheta = lastTheta + lastVel*delta;
 	lastVel = lastVel + lastAccel*delta;

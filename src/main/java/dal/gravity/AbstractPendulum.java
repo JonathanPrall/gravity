@@ -13,7 +13,7 @@ public abstract class AbstractPendulum {
     protected double theta0; 
     //protected static final double GRAVITY = 9.80665; 
     private GravityModel GM;
-    private static GravityConstant GC = new GravityConstant(9.80665);
+    protected static GravityConstant GC = new GravityConstant(9.80665);
     /**
      * Creates a new Pendulum instance using
      * inLength: the string length (>0)
