@@ -11,8 +11,9 @@ public abstract class AbstractPendulum {
      */
     private double stringLength, pointMass;
     protected double theta0; 
-    protected static final double GRAVITY = 9.80665; 
-
+    //protected static final double GRAVITY = 9.80665; 
+    private GravityModel GM;
+    private static GravityConstant GC = new GravityConstant(9.80665);
     /**
      * Creates a new Pendulum instance using
      * inLength: the string length (>0)
@@ -21,6 +22,10 @@ public abstract class AbstractPendulum {
      * inG: gravitational field value to use
      */
     public AbstractPendulum (double inLength, double inMass, double inTheta0) {
+    	this(inLength, inMass, inTheta0, GC);
+    }
+    
+    public AbstractPendulum (double inLength, double inMass, double inTheta0, GravityModel inGM) {
 	if (validStringLength (inLength)) stringLength = inLength;
 	else throw new IllegalArgumentException ("invalid string length: " + inLength);
 	if (validPointMass(inMass)) pointMass = inMass;
@@ -28,14 +33,15 @@ public abstract class AbstractPendulum {
 	if (validDisplacement (inTheta0)) theta0 = inTheta0;
 	else throw new IllegalArgumentException 
 		 ("invalid angular displacement: " + inTheta0);
-	//if (validGC (inG)) g = inG;
-	//else throw new IllegalArgumentException ("invalid local gravitational field: " + inG);
+	if (validGC(inGM.getGravitationField()))
+		GM = inGM;
+	else throw new IllegalArgumentException ("invalid local gravitational field: " + inGM.getGravitationField());
     }
 
     private boolean validDisplacement (double val) { return (val >= 0); }
     private boolean validPointMass (double val) { return (val > 0); }
     private boolean validStringLength (double val) { return (val > 0); }
-    //private boolean validGC (double val) { return (val >= 0); }
+    private boolean validGC (double val) { return (val >= 0); }
 
     public double getMaxAngularDisplacement () { return theta0; }
 
@@ -43,6 +49,12 @@ public abstract class AbstractPendulum {
 
     public double getStringLength () { return stringLength; }
 
-    public double getGravitationalField () { return GRAVITY; }
+    public double getGravitationalField () { 
+    	return GM.getGravitationField(); 
+    }
+    
+    public void setGravitationalField(GravityConstant GC2) {
+    	GC = GC2;
+    }
 
 }
